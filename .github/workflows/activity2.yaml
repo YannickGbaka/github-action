@@ -50,5 +50,5 @@ jobs:
       - name: always
         if: ${{ always() }}
         run:
-          echo "End of the job process with the status ${{ job.status }}
+          echo "End of the job process with the status ${{ job.status }}"
       
