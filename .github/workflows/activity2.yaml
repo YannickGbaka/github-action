@@ -48,7 +48,7 @@ jobs:
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
       - name: always
-        if: always()
+        if: ${{ always() }}
         run:
           echo "End of the job process with the status ${{ job.status }}
       
