@@ -1,67 +1,57 @@
-name: activityci
-on:
+name: ACTIONCI
+on: 
   workflow_dispatch:
   pull_request:
     branches:
       - main
-
-
 env:
   SONAR_DEV_URL: sonar-dev.agenceemploijeunes.ci
-
 jobs: 
-  build:
-    name: start build job
+  echostarbuil:
+    name: echostarbuil job
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
-      - name: build job
-        id: build
-        run: |
-          echo "start build..."
-          sleep 1s
-          echo "end build..."
+     - name: Print Start build
+       id: status
+       run: |
+         echo "start build..."
+         sleep 1s
+         echo "end build..."
+         echo "status=done" >> "$GITHUB_OUTPUT"
     outputs:
-      status: 'done'
+      status: ${{ steps.status.outputs.status }}
   
-  dependant:
-    name: depend upon first job
+  echostartnonregression:
+    name: echostartnonregression job
+    needs: echostarbuil
     runs-on: ubuntu-latest
     timeout-minutes: 10
-    needs: build
     steps:
-      - if: ${{ needs.build.outputs.status == 'done' }}
-        name: non regression job
-        id: regression
+      - name: Print Start non regression
+        id: testNonRegression
+        if: ${{ needs.echostarbuil.outputs.status == 'done' }}
         run: |
-          echo "start test non regression..."
-          sleep 1s
-          echo "end test non regression"
+           echo "start test non regression..."
+           sleep 1s
+           echo "end test non regression..."
+           echo "testNonRegression=OK" >> "$GITHUB_OUTPUT"
     outputs:
-      testNonRegression: 'Ok'
-
-
-  runnerjob:
-    name: runner job
-    runs-on: ubuntu-20.04
+      testNonRegression: ${{ steps.testNonRegression.outputs.testNonRegression }}
+  
+  echohostsonar:
+    name: echohostsonar job
+    needs: echostartnonregression
+    runs-on: ubuntu-latest
     timeout-minutes: 1
-    needs: dependant
     steps:
-      - if: ${{ needs.dependant.outputs.testNonRegression == 'Ok' }}
-        name: runner dependant job
-        id: sonardisplay
+      - name: Print Host sonar
+        if: ${{ needs.echostartnonregression.outputs.testNonRegression == 'OK' }}
         run: |
-          echo ${{ env.SONAR_DEV_URL }}
-          echo "RUNNER : UB 20.04" 
+          echo "$SONAR_DEV_URL"
           sleep 2m
           echo "end Sonar Scanning"
-      - name: message to slack
+      - name: send message to slack
         if: ${{ cancelled() }}
         run: |
-          echo "messaging to slack"
-      - name: failure
-        if: ${{ failure() }}
-        run: |
-          echo "the job failed"
-          exit 0
-
+          echo "Github a annulé mon job"
