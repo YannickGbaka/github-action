@@ -1,0 +1,25 @@
+name: ci
+on:
+  push:
+    branches:
+      - 'feature/**'
+jobs:
+  init:
+    name: display project creation cmd job
+    runs-on: ubuntu-20.04
+    steps:
+      - name: init project cmd
+        run: |
+           echo "composer create-project laravel/laravel example-app"
+  serve:
+    name: display project serving cmd job
+    runs-on: ubunru-20.04
+    steps:
+      - name: serve project cmd
+        run: |
+        echo "php artisan serve"  
+
+defaults:
+  run:
+    shell:bash
+    
