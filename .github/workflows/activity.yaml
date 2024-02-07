@@ -1,0 +1,57 @@
+name: ACTIONCI
+on: 
+  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
+env:
+  SONAR_DEV_URL: sonar-dev.agenceemploijeunes.ci
+jobs: 
+  echostarbuil:
+    name: echostarbuil job
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+     - name: Print Start build
+       id: status
+       run: |
+         echo "start build..."
+         sleep 1s
+         echo "end build..."
+         echo "status=done" >> "$GITHUB_OUTPUT"
+    outputs:
+      status: ${{ steps.status.outputs.status }}
+  
+  echostartnonregression:
+    name: echostartnonregression job
+    needs: echostarbuil
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Print Start non regression
+        id: testNonRegression
+        if: ${{ needs.echostarbuil.outputs.status == 'done' }}
+        run: |
+           echo "start test non regression..."
+           sleep 1s
+           echo "end test non regression..."
+           echo "testNonRegression=OK" >> "$GITHUB_OUTPUT"
+    outputs:
+      testNonRegression: ${{ steps.testNonRegression.outputs.testNonRegression }}
+  
+  echohostsonar:
+    name: echohostsonar job
+    needs: echostartnonregression
+    runs-on: ubuntu-latest
+    timeout-minutes: 1
+    steps:
+      - name: Print Host sonar
+        if: ${{ needs.echostartnonregression.outputs.testNonRegression == 'OK' }}
+        run: |
+          echo "$SONAR_DEV_URL"
+          sleep 2m
+          echo "end Sonar Scanning"
+      - name: send message to slack
+        if: ${{ cancelled() }}
+        run: |
+          echo "Github a annulé mon job"
