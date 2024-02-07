@@ -52,7 +52,7 @@ jobs:
         id: sonardisplay
         run: |
           echo ${{ env.SONAR_DEV_URL }}
-          echo ${{ RUNNER_OS }}
+          echo "RUNNER : UB 20.04" 
           sleep 2m
           echo "end Sonar Scanning"
       - name: message to slack
