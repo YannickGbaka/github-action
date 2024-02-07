@@ -1,0 +1,67 @@
+name: ci
+on:
+  pull_request:
+    branch:
+      - main
+  workflow_dispatch:
+
+
+env:
+  SONAR_DEV_URL: sonar-dev.agenceemploijeunes.ci
+
+jobs: 
+  build:
+    name: start build job
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: build job
+        id: build
+        run: |
+          echo "start build..."
+          sleep 1s
+          echo "end build..."
+    outputs:
+      status: 'done'
+  
+  dependant:
+    name: depend upon first job
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    needs: build
+    steps:
+      - if: ${{ needs.build.outputs.status == 'done' }}
+        name: non regression job
+        id: regression
+        run: |
+          echo "start test non regression..."
+          sleep 1s
+          echo "end test non regression"
+    outputs:
+      testNonRegression: 'Ok'
+
+
+  runnerjob:
+    name: runner job
+    runs-on: ubuntu-20.04
+    timeout-minutes: 1
+    needs: dependant
+    steps:
+      - if: ${{ needs.dependant.outputs.testNonRegression == 'Ok' }}
+        name: runner dependant job
+        id: sonardisplay
+        run: |
+          echo ${{ env.SONAR_DEV_URL }}
+          echo ${{ RUNNER_OS }}
+          sleep 2m
+          echo "end Sonar Scanning"
+      - name: message to slack
+        if: ${{ cancel() }}
+        run: |
+          echo "messaging to slack"
+      - name: failure
+        if: ${{ failure() }}
+        run: |
+          echo "the job failed"
+          exit 0
+
