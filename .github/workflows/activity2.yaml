@@ -36,9 +36,6 @@ jobs:
       - name: Clear config
         run: php artisan config:clear
 
-      - name: Run migration
-        run: php artisan migrate -v
-
       - name: post to a slack channel
         id: post
         uses: slackapi/slack-github-action@v1.25
