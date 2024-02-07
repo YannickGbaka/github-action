@@ -56,7 +56,7 @@ jobs:
           sleep 2m
           echo "end Sonar Scanning"
       - name: message to slack
-        if: ${{ cancel() }}
+        if: ${{ cancelled() }}
         run: |
           echo "messaging to slack"
       - name: failure
