@@ -44,7 +44,7 @@ jobs:
         uses: slackapi/slack-github-action@v1.25
         with:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
-          slack-message: "The job status is ${{ job.status }}\nThe build number is : \nThe github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
+          slack-message: "The job status is ${{ job.status }}\nThe build number is : \nThe github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.actor }}"
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
 
