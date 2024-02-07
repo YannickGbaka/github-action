@@ -40,13 +40,13 @@ jobs:
         run: php artisan migrate -v
 
       - name: post to a slack channel
-        id: 
+        id: post
         uses: slackapi/slack-github-action@v1.25
         with:
           channel-id: ${{ vars.SLACK_CHANNEL_ID }}
-          env:
-            SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
           slack-message: "The job status is ${{ job.status }}\nThe build number is : \nThe github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_TOKEN }}
 
 
 
