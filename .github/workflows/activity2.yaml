@@ -1,5 +1,4 @@
 name: reuse global ci
-
 on:
   push:
   workflow_dispatch:
