@@ -2,7 +2,6 @@ name: reuse global ci
 on:
   push:
   workflow_dispatch:
-  
 jobs:
   global-ci-resuse:
     uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@master
