@@ -1,10 +1,11 @@
 name: reuse global ci
 on:
   push:
+  workflow_dispatch:
   
 jobs:
   global-ci-resuse:
-    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@master
+    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@main
     with: 
       phpversion: '8.1'
       slack-message: "The job status is ${{ job.status }}\nThe build number is : \nThe github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
