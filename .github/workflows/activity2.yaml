@@ -1,8 +1,5 @@
 name: reuse global ci
-permissions:
-  issues: write
-  id-token: write
-  contents: read
+
 on:
   push:
   workflow_dispatch:
