@@ -28,21 +28,6 @@ jobs:
         phpversion: '8.1'
         slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
 
-    - name: Generate SBOM with CycloneDX
-      run: |
-        composer require --dev cyclonedx/cyclonedx-php-composer
-        composer update
-        composer CycloneDX:make-sbom --output-file=sbom.xml
-         
-    - name: Dependency Track
-      run: |
-        curl -X "POST" "http://51.20.132.110:8081/api/v1/bom" \
-        -H 'Content-Type: multipart/form-data' \
-        -H "X-Api-Key: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}" \
-        -F "autoCreate=true" \
-        -F "projectName=${{ vars.PROJECT_NAME }}" \
-        -F "projectVersion=1.0" \
-        -F "bom=@./sbom.xml"
 
 # jobs:
 #   global-ci-resuse:
