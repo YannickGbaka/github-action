@@ -10,18 +10,32 @@ on:
       - 'feature/**'
 
 jobs:
-  global-ci-resuse:
-    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@master
-    with: 
-      phpversion: '8.1'
-      slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
+  sonarqube:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        # Disabling shallow clones is recommended for improving the relevancy of reporting
+        fetch-depth: 0
+    - name: SonarQube Scan
+      uses: sonarsource/sonarqube-scan-action@master
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
-    secrets:
-      slackToken: ${{ secrets.SLACK_TOKEN }}
-  sonarscanner:
-    uses: sonarsource/sonarqube-scan-action@master
-    env:
-      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+# jobs:
+#   global-ci-resuse:
+#     uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@master
+#     with: 
+#       phpversion: '8.1'
+#       slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
+
+#     secrets:
+#       slackToken: ${{ secrets.SLACK_TOKEN }}
+#   sonarscanner:
+#      uses: sonarsource/sonarqube-scan-action@master
+#      env:
+#       SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+#       SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
 
