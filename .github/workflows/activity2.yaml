@@ -1,17 +1,27 @@
 name: reuse global ci
 on:
   workflow_dispatch:
-  
+
   push:
+    branches:
+      - main
+      - master
+      - develop
+      - 'feature/**'
 
 jobs:
   global-ci-resuse:
-    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@main
+    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@master
     with: 
       phpversion: '8.1'
-      slack-message: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
+      slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
 
     secrets:
       slackToken: ${{ secrets.SLACK_TOKEN }}
+  sonarscanner:
+    uses: sonarsource/sonarqube-scan-action@master
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
 
