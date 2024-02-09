@@ -25,6 +25,7 @@ jobs:
 
     - name: Generate SBOM with CycloneDX
       run: |
+        composer config --no-plugins allow-plugins.cyclonedx/cyclonedx-php-composer true
         composer require --dev cyclonedx/cyclonedx-php-composer
         composer update
         composer CycloneDX:make-sbom --output-file=sbom.xml
