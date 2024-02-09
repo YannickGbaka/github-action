@@ -26,6 +26,7 @@ jobs:
       slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
     secrets:
       slackToken: ${{ secrets.SLACK_TOKEN }}
+      deptrackapikey: ${{ secrets.DEPENDENCY_TRACK_API_KEY }}
 
 # jobs:
 #   global-ci-resuse:
