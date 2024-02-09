@@ -4,10 +4,10 @@ on:
 
 jobs:
   global-ci-resuse:
-    uses: YannickGbaka/ci-commons/blob/master/.github/workflows/resuable-ci.yml@main
+    uses: YannickGbaka/ci-commons/.github/workflows/resuable-ci.yml@main
     with: 
       phpversion: '8.1'
-      slack-message: "The job status is ${{ job.status }}\nThe build number is : \nThe github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
+      slack-message: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ $github.autor }}"
 
     secrets:
       slackToken: ${{ secrets.SLACK_TOKEN }}
