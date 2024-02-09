@@ -23,7 +23,8 @@ jobs:
     with:
       phpversion: '8.1'
       slackmessage: "The github repository number is : ${{ github.repository }}\n The workflow actor is ${{ github.autor }}"
-
+    secrets:
+      slackToken: ${{ secrets.SLACK_TOKEN }}
 
 # jobs:
 #   global-ci-resuse:
