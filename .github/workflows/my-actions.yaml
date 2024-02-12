@@ -36,19 +36,19 @@ jobs:
         password: ${{ $secrets.EC2_PASSWORD }}
         port: 22
         script: |
-          yum install git -y
-          dnf install php php-cli php-zip php-json -y
-          curl -sS https://getcomposer.org/installer | php
-          mv composer.phar /usr/bin/composer
-          chmod +x /usr/bin/composer
-          cd ${{ env.project-path }}
-          composer install --no-interaction --ignore-platform-reqs
-          chown -R apache.apache ${{ env.project-path }}
-          chmod -R 755 ${{ env.project-path }}
-          chmod -R 755 ${{ env.project-path }}/storage
-          chcon -R -t httpd_sys_rw_content_t ${{ env.project-path }}/storage
-          cp .env.example .env
-          php artisan key:generate
+          sudo yum install git -y
+          sudo dnf install php php-cli php-zip php-json -y
+          sudo curl -sS https://getcomposer.org/installer | php
+          sudo mv composer.phar /usr/bin/composer
+          sudo chmod +x /usr/bin/composer
+          sudo cd ${{ env.project-path }}
+          sudo composer install --no-interaction 
+          sudo chown -R apache.apache ${{ env.project-path }}
+          sudo chmod -R 755 ${{ env.project-path }}
+          sudo chmod -R 755 ${{ env.project-path }}/storage
+          sudo chcon -R -t httpd_sys_rw_content_t ${{ env.project-path }}/storage
+          sudo cp .env.example .env
+          sudo php artisan key:generate
           
 
 
