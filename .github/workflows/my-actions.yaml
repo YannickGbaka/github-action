@@ -7,7 +7,7 @@ on:
       - 'main'
 
 env:
-  home_project_path: "/home/ec2-user/app"
+  home_project_path: "/home/ec2-user/app/"
   project-path: "/var/www/app"
 
 jobs:
@@ -44,7 +44,7 @@ jobs:
           sudo mv composer.phar /usr/bin/composer
           sudo chmod +x /usr/bin/composer
           sudo cd ${{ env.project-path }}
-          sudo composer install --no-interaction 
+          composer install --no-interaction 
           sudo chown -R apache.apache ${{ env.project-path }}
           sudo chmod -R 755 ${{ env.project-path }}
           sudo chmod -R 755 ${{ env.project-path }}/storage
