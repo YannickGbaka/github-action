@@ -8,7 +8,7 @@ on:
 
 env:
   home_project_path: "/home/ec2-user/app"
-  project_path: "/var/www/app"
+  project-path: "/var/www/app"
 
 jobs:
 
@@ -27,7 +27,7 @@ jobs:
         password: ${{ secrets.EC2_PASSWORD }}
         port: 22
         source: "."
-        target: ${{ env.project-path }}
+        target: ${{ env.home_project_path }}
 
     - name: executing remote ssh commands using password
       uses: appleboy/ssh-action@v1.0.3
