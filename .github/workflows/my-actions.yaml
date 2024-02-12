@@ -7,7 +7,8 @@ on:
       - 'main'
 
 env:
-  project_path: "/var/www/github-actions"
+  home_project_path: "/home/ec2-user/app"
+  project_path: "/var/www/app"
 
 jobs:
 
@@ -36,6 +37,7 @@ jobs:
         password: ${{ secrets.EC2_PASSWORD }}
         port: 22
         script: |
+          sudo mv ${{ env.home_project_path }} /var/www
           sudo yum install git -y
           sudo dnf install php php-cli php-zip php-json -y
           sudo curl -sS https://getcomposer.org/installer | php
