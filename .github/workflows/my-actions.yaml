@@ -33,7 +33,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }}
         username: ${{ secrets.EC2_USERNAME }}
-        password: ${{ $secrets.EC2_PASSWORD }}
+        password: ${{ secrets.EC2_PASSWORD }}
         port: 22
         script: |
           sudo yum install git -y
@@ -49,8 +49,7 @@ jobs:
           sudo chcon -R -t httpd_sys_rw_content_t ${{ env.project-path }}/storage
           sudo cp .env.example .env
           sudo php artisan key:generate
-          
-
+      
 
 
 
