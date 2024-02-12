@@ -52,8 +52,7 @@ jobs:
           sudo cp .env.example .env
           sudo php artisan key:generate
       
-      
-
+    
 
 defaults:
   run:
