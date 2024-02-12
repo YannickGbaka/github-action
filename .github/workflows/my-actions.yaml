@@ -1,24 +1,62 @@
-name: "example ci"
+name: "cd & cd pipeline"
 on:
+  workflow_dispatch:
+
   push:
     branches:
-      - 'feature/**'
+      - 'main'
 
-jobs: 
-  security:
-    name: security job
-    runs-on: ubuntu-20.04
+env:
+  project_path: "/var/www/github-actions"
+
+jobs:
+
+  deployment:
+    name: deployment on ec2 machine
+    runs-on: ubuntu-latest
+
     steps:
-     - name: Print my username
-       run: |
-         echo "This formation is called DevOps"
-  authentication:
-    name: authentication job
-    runs-on: ubuntu-22.04
-    steps:
-    - name: Print message
-      run: |
-        echo "DevOps allows to automate things"
+    - uses:  actions/checkout@v4
+
+    - name: copy file via ssh password
+      uses: appleboy/scp-action@0.1.7
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        password: ${{ $secrets.EC2_PASSWORD }}
+        port: 22
+        source: "."
+        target: ${{ env.project-path }}
+
+    - name: executing remote ssh commands using password
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.EC2_HOST }}
+        username: ${{ secrets.EC2_USERNAME }}
+        password: ${{ $secrets.EC2_PASSWORD }}
+        port: 22
+        script: |
+          yum install git -y
+          dnf install php php-cli php-zip php-json -y
+          curl -sS https://getcomposer.org/installer | php
+          mv composer.phar /usr/bin/composer
+          chmod +x /usr/bin/composer
+          cd ${{ env.project-path }}
+          composer install --no-interaction --ignore-platform-reqs
+          chown -R apache.apache ${{ env.project-path }}
+          chmod -R 755 ${{ env.project-path }}
+          chmod -R 755 ${{ env.project-path }}/storage
+          chcon -R -t httpd_sys_rw_content_t ${{ env.project-path }}/storage
+          cp .env.example .env
+          php artisan key:generate
+          
+
+
+
+
+
+      
+
 
 defaults:
   run:
